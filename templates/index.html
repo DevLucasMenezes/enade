@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otimizador Financeiro - ENADE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            color: #2c3e50;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar-custom {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #2a5298;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #1e3c72;
+            padding-left: 10px;
+        }
+        .card-custom {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card-custom:hover {
+            transform: translateY(-2px);
+        }
+        .card-title-custom {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-control-custom {
+            background-color: #f8f9fa;
+            border: 1px solid #dcdde1;
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: right;
+        }
+        .form-control-custom:focus {
+            background-color: #ffffff;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 0.2rem rgba(42, 82, 152, 0.25);
+        }
+        .btn-calc {
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,176,155,0.3);
+        }
+        .btn-calc:hover {
+            background: linear-gradient(135deg, #009985 0%, #82b032 100%);
+            color: white;
+        }
+        .btn-clear {
+            background-color: #ffffff;
+            border: 2px solid #718093;
+            color: #718093;
+            font-weight: bold;
+            padding: 12px;
+        }
+        .btn-clear:hover {
+            background-color: #718093;
+            color: white;
+        }
+        .math-block {
+            background-color: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .res-card {
+            background-color: #e3f2fd;
+            border-top: 5px solid #1e3c72;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .res-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar-custom">
+    <div class="container">
+        <h1 class="fw-bold">Otimizador Financeiro</h1>
+        <p class="mb-0 opacity-75">Edite os parâmetros das fábricas e da demanda, depois calcule a solução ótima.</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    
+    <form method="POST" action="/calcular">
+        
+      <!-- 01 — DADOS DO PROBLEMA -->
+        <div class="row align-items-center mt-4 mb-3">
+            <div class="col-md-4">
+                <div class="section-title m-0">01 — Dados do Problema</div>
+            </div>
+            <div class="col-md-8 text-md-end text-start mt-2 mt-md-0">
+                <!-- Box de Identificação Destacado -->
+                <div class="d-inline-block px-3 py-2 rounded-3 shadow-sm border" style="background-color: #e3f2fd; border-color: #b3e5fc !important; font-size: 0.9rem;">
+                    <span style="color: #0d47a1;">
+                        <strong class="text-muted text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">Aluno:</strong> 
+                        <strong>LUCAS MENEZES</strong>
+                    </span>
+                    <span class="mx-3 text-muted" style="opacity: 0.5;">|</span>
+                    <span style="color: #0d47a1;">
+                        <strong class="text-muted text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">Professora Orientadora:</strong> 
+                        <strong>ADRIANA CLERICUZI</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-custom">🏭 Fábrica de Manaus</div>
+                    <div class="text-muted small mb-3">REGIÃO NORTE</div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Comp. de mesa:</label>
+                        <div class="col-5"><input type="number" name="manaus_mesa" class="form-control form-control-custom" value="{{ dados.manaus_mesa if dados else 8000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Cadernos:</label>
+                        <div class="col-5"><input type="number" name="manaus_cadernos" class="form-control form-control-custom" value="{{ dados.manaus_cadernos if dados else 1000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Netbooks:</label>
+                        <div class="col-5"><input type="number" name="manaus_netbooks" class="form-control form-control-custom" value="{{ dados.manaus_netbooks if dados else 2000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Custo/dia (R$):</label>
+                        <div class="col-5"><input type="number" name="manaus_custo" class="form-control form-control-custom" value="{{ dados.manaus_custo if dados else 150000 }}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-custom">🏭 Fábrica da Região Sul</div>
+                    <div class="text-muted small mb-3">REGIÃO SUL</div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Comp. de mesa:</label>
+                        <div class="col-5"><input type="number" name="sul_mesa" class="form-control form-control-custom" value="{{ dados.sul_mesa if dados else 2000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Cadernos:</label>
+                        <div class="col-5"><input type="number" name="sul_cadernos" class="form-control form-control-custom" value="{{ dados.sul_cadernos if dados else 1000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Netbooks:</label>
+                        <div class="col-5"><input type="number" name="sul_netbooks" class="form-control form-control-custom" value="{{ dados.sul_netbooks if dados else 7000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Custo/dia (R$):</label>
+                        <div class="col-5"><input type="number" name="sul_custo" class="form-control form-control-custom" value="{{ dados.sul_custo if dados else 210000 }}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-custom">📦 Demanda do Pedido</div>
+                    <div class="text-muted small mb-3">QUANTIDADE MÍNIMA</div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Comp. de mesa:</label>
+                        <div class="col-5"><input type="number" name="demanda_mesa" class="form-control form-control-custom" value="{{ dados.demanda_mesa if dados else 16000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Cadernos:</label>
+                        <div class="col-5"><input type="number" name="demanda_cadernos" class="form-control form-control-custom" value="{{ dados.demanda_cadernos if dados else 6000 }}"></div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <label class="col-7 col-form-label text-secondary">Netbooks:</label>
+                        <div class="col-5"><input type="number" name="demanda_netbooks" class="form-control form-control-custom" value="{{ dados.demanda_netbooks if dados else 28000 }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-9 mb-2">
+                <button type="submit" class="btn btn-calc w-100 rounded-3 shadow-sm">Calcular Solução Ótima</button>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a href="/" class="btn btn-clear w-100 rounded-3 text-center d-block" style="text-decoration: none;">Limpar</a>
+            </div>
+        </div>
+    </form>
+
+    {% if error %}
+    <div class="alert alert-danger shadow-sm rounded-3" role="alert">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    {% if resultado %}
+    <div class="section-title">02 — Modelo Matemático</div>
+    <div class="card-custom">
+        <h5 class="fw-bold mb-3 text-dark">Formulação em Programação Linear</h5>
+        
+        <div class="text-muted small mb-2 fw-bold text-uppercase">Variáveis de Decisão</div>
+        <div class="math-block text-primary">
+            x = número de dias de operação da fábrica de Manaus<br>
+            y = número de dias de operação da fábrica do Sul
+        </div>
+
+        <div class="text-muted small mb-2 fw-bold text-uppercase">Função Objetivo — Minimizar Custo Total</div>
+        <div class="math-block text-success">
+            min Z = {{ dados.manaus_custo }}x + {{ dados.sul_custo }}y
+        </div>
+
+        <div class="text-muted small mb-2 fw-bold text-uppercase">Sujeito às Restrições</div>
+        <div class="math-block text-danger">
+            {{ dados.manaus_mesa }}x + {{ dados.sul_mesa }}y &ge; {{ dados.demanda_mesa }} // computadores de mesa<br>
+            {{ dados.manaus_cadernos }}x + {{ dados.sul_cadernos }}y &ge; {{ dados.demanda_cadernos }} // cadernos<br>
+            {{ dados.manaus_netbooks }}x + {{ dados.sul_netbooks }}y &ge; {{ dados.demanda_netbooks }} // netbooks<br>
+            x &ge; 0 , y &ge; 0
+        </div>
+    </div>
+
+    <div class="section-title">03 — Solução</div>
+    <div class="card-custom">
+        <h5 class="fw-bold mb-4 text-dark text-start">Solução Ótima Encontrada</h5>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="res-card shadow-sm">
+                    <div class="text-muted small fw-bold">DIAS – MANAUS (X)</div>
+                    <div class="res-value text-success">{{ resultado.x }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="res-card shadow-sm">
+                    <div class="text-muted small fw-bold">DIAS – SUL (Y)</div>
+                    <div class="res-value text-success">{{ resultado.y }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="res-card shadow-sm" style="background-color: #fff9db; border-top-color: #f59f00;">
+                    <div class="text-muted small fw-bold">CUSTO MÍNIMO (Z)</div>
+                    <div class="res-value text-warning" style="color: #f59f00 !important;">R$ {{ resultado.custo_total }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-muted small mb-2 fw-bold text-uppercase text-start">Como foi calculado</div>
+        <div class="math-block text-start bg-white border-start-0 ps-0 text-dark" style="font-family: inherit;">
+            Z = {{ dados.manaus_custo }} &times; {{ resultado.x }} + {{ dados.sul_custo }} &times; {{ resultado.y }} <br>
+            Z = R$ {{ resultado.parcial_manaus }} + R$ {{ resultado.parcial_sul }} <br>
+            <strong class="text-success">Z = R$ {{ resultado.custo_total }} &larr; custo mínimo</strong>
+        </div>
+
+        <div class="text-muted small mb-2 fw-bold text-uppercase text-start mt-3">Verificação das Restrições</div>
+        <div class="math-block text-start bg-light text-secondary border-0 ps-3">
+            ✔ Computadores de mesa: {{ dados.manaus_mesa }}&times;({{ resultado.x }}) + {{ dados.sul_mesa }}&times;({{ resultado.y }}) &rarr; <strong>{{ resultado.check_mesa }}</strong> &ge; {{ dados.demanda_mesa }} <span class="text-success fw-bold">(atendido)</span><br>
+            ✔ Cadernos: {{ dados.manaus_cadernos }}&times;({{ resultado.x }}) + {{ dados.sul_cadernos }}&times;({{ resultado.y }}) &rarr; <strong>{{ resultado.check_cadernos }}</strong> &ge; {{ dados.demanda_cadernos }} <span class="text-success fw-bold">(atendido)</span><br>
+            ✔ Netbooks: {{ dados.manaus_netbooks }}&times;({{ resultado.x }}) + {{ dados.sul_netbooks }}&times;({{ resultado.y }}) &rarr; <strong>{{ resultado.check_netbooks }}</strong> &ge; {{ dados.demanda_netbooks }} <span class="text-success fw-bold">(atendido)</span>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
