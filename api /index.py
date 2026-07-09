@@ -2,6 +2,25 @@ from flask import Flask, render_template, request
 from scipy.optimize import linprog
 import os
 
+
+
+app = Flask(__name__, template_folder='../templates')
+app.secret_key = 'chave_secreta_enade'
+
+@app.route('/')
+def index():
+    return render_template('index.html', dados=None, resultado=None)
+
+# ... suas outras rotas aqui ...
+
+# Adicione isso no final
+def handler(request):
+    return app(request)
+
+
+
+
+
 app = Flask(__name__, template_folder='../templates')
 app.secret_key = 'chave_secreta_enade'
 app = app
@@ -78,19 +97,4 @@ def calcular():
 if __name__ == '__main__':
     app.run(debug=True)
 
-from flask import Flask, render_template, request
-from scipy.optimize import linprog
-import os
 
-app = Flask(__name__, template_folder='../templates')
-app.secret_key = 'chave_secreta_enade'
-
-@app.route('/')
-def index():
-    return render_template('index.html', dados=None, resultado=None)
-
-# ... suas outras rotas aqui ...
-
-# Adicione isso no final
-def handler(request):
-    return app(request)
